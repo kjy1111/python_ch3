@@ -6,7 +6,10 @@ from django.http import HttpResponseRedirect
 
 
 def index(request):
-    return render(request, 'guestbook/index.html')
+    guestbook_list = Guestbook.objects.all().order_by('-regdate')
+
+    context = {'guestbook_list': guestbook_list}
+    return render(request, 'guestbook/index.html', context)
 
 
 def add(request):
