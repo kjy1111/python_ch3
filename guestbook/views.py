@@ -7,25 +7,25 @@ from django.http import HttpResponseRedirect
 
 def index(request):
     guestbook_list = Guestbook.objects.all().order_by('-regdate')
-
     context = {'guestbook_list': guestbook_list}
     return render(request, 'guestbook/index.html', context)
 
 
-# def delete(request):
-#     Guestbook.objects.filter(id=request.id).filter(password=request.GET['password']).delete()
-#     return render(request, 'guestbook/deleteform.html')
+def delete(request):
+    guest_id = request.POST['id']
+    guest_pw = request.POST['password']
+    Guestbook.objects.filter(id=guest_id).filter(password=guest_pw).delete()
+    return HttpResponseRedirect('/guestbook')
 
 
 def deleteform(request):
-    Guestbook.objects.filter(id=request.GET['id']).filter(password='password').delete()
-    return render(request, 'guestbook/deleteform.html')
-    # return render(request, 'guestbook/deleteform.html')
+    guest_id = request.GET['id']
+    context = {'guest_id': guest_id}
+    return render(request, 'guestbook/deleteform.html', context)
 
 
 def add(request):
     guestbook = Guestbook()
-    guestbook.id = request.POST['id']
     guestbook.name = request.POST['name']
     guestbook.password = request.POST['password']
     guestbook.message = request.POST['message']
